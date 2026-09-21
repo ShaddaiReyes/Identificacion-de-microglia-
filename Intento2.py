@@ -185,15 +185,26 @@ def guardar_resultados(ruta_imagen, img, etiquetas, resultados, carpeta_salida):
 if __name__ == "__main__":
     
     # 1. Tu archivo real (Asegúrate de que esté en la misma carpeta que el script)
-    IMAGEN = r"C:\Users\shada\OneDrive\Desktop\Servicio\R1_5XVEH_40X_CA1_FOTO1_T2.nd2"
-    
+    import getpass
+    usuario_actual = getpass.getuser()
+
+    if usuario_actual == "shada":
+        IMAGEN = rf"C:\Users\{usuario_actual}\OneDrive\Desktop\Servicio\R1_5XVEH_40X_CA1_FOTO1_T2.nd2"
+    else:
+        IMAGEN = rf"C:\Users\{usuario_actual}\OneDrive\Servicio\R1_5XVEH_40X_CA1_FOTO1_T2.nd2"
+
     # 2. Parámetros de la prueba inicial alta sensibilidad
     CANAL_INTERES = 1
     TOLERANCIA = 15.0
     DISTANCIA_MIN = 25
     UMBRAL_RELATIVO = 0.4  # Sensibilidad máxima
     AREA_MINIMA = 80 #Pixeles
-    CARPETA_SALIDA = r"C:\Users\shada\OneDrive\Desktop\Servicio\resultados_segmentacion"
+    if usuario_actual == "shada":
+        CARPETA_SALIDA = r"C:\Users\shada\OneDrive\Desktop\Servicio\resultados_segmentacion"
+    else:
+        CARPETA_SALIDA = rf"C:\Users\{usuario_actual}\OneDrive\Servicio\resultados_segmentacion"
+        
+    
     
     # -------------------------------------------------------------------------
     print(f"\n--- INICIANDO PROCESAMIENTO DE: {IMAGEN} ---")
