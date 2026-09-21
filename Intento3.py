@@ -5,7 +5,6 @@ Created on Mon Sep 21 10:16:48 2026
 @author: shada
 """
 
-import csv
 from pathlib import Path
 
 import numpy as np
@@ -155,14 +154,10 @@ def guardar_resultados(ruta_imagen, img, etiquetas, resultados, carpeta_salida):
     )
 
     # 2. Overlay visual: Fondo claro, Glías oscuras con alto contraste
-    from skimage.segmentation import find_boundaries
-
     import matplotlib
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-
-    contornos = find_boundaries(etiquetas, mode="outer")
 
     # Normalizar y estirar contraste
     p1, p99 = np.percentile(img, (1, 99))
@@ -172,10 +167,6 @@ def guardar_resultados(ruta_imagen, img, etiquetas, resultados, carpeta_salida):
     ax.imshow(
         img_norm, cmap="gray"
     )  # Muestra el fondo blanco con glías oscuras
-
-    overlay = np.zeros((*img.shape, 4))
-    overlay[contornos] = [1, 0, 0, 1]  # Contornos en rojo
-    ax.imshow(overlay)
     ax.axis("off")
 
     ruta_overlay = str(carpeta_salida / f"{base}_overlay.png")
@@ -198,8 +189,6 @@ if __name__ == "__main__":
         r"C:\Users\shada\OneDrive\Desktop\Servicio\resultados_segmentacion"
     )
 
-    print(f"\n--- INICIANDO PROCESAMIENTO ADAPTATIVO: {IMAGEN} ---")
-
     try:
         img, etiquetas, resultados = segmentar_con_regionprops(
             IMAGEN,
@@ -210,11 +199,12 @@ if __name__ == "__main__":
         )
 
         if resultados:
-            print(f"\n¡Éxito! Se detectaron {len(resultados)} células.")
+            print(f"\nSe detectaron {len(resultados)} células.")
             rutas = guardar_resultados(
                 IMAGEN, img, etiquetas, resultados, CARPETA_SALIDA
             )
             print("Archivos generados en 'resultados_segmentacion'.")
 
     except FileNotFoundError:
+        print(f"\n[ERROR CRÍTICO] Archivo no encontrado: '{IMAGEN}'")    except FileNotFoundError:
         print(f"\n[ERROR CRÍTICO] Archivo no encontrado: '{IMAGEN}'")
